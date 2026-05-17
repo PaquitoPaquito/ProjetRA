@@ -16,6 +16,7 @@ public class Grenier : MonoBehaviour
 
     public void OnPlay()
     {
+        Debug.Log("ok");
         board.Play(id);
     }
 }
