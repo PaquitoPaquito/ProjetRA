@@ -42,6 +42,19 @@ namespace UnityEngine.XR.Templates.AR
         }
 
         [SerializeField]
+        [Tooltip("Button that deletes a selected object.")]
+        Button m_LockButton;
+
+        /// <summary>
+        /// Button that locks a selected object.
+        /// </summary>
+        public Button lockButton
+        {
+            get => m_LockButton;
+            set => m_LockButton = value;
+        }
+
+        [SerializeField]
         [Tooltip("The menu with all the creatable objects.")]
         GameObject m_ObjectMenu;
 
@@ -231,6 +244,7 @@ namespace UnityEngine.XR.Templates.AR
             m_CreateButton.onClick.AddListener(ShowMenu);
             m_CancelButton.onClick.AddListener(HideMenu);
             m_DeleteButton.onClick.AddListener(DeleteFocusedObject);
+            m_LockButton.onClick.AddListener(ToggleLockFocusedObject);
             m_PlaneManager.trackablesChanged.AddListener(OnPlaneChanged);
         }
 
@@ -243,6 +257,7 @@ namespace UnityEngine.XR.Templates.AR
             m_CreateButton.onClick.RemoveListener(ShowMenu);
             m_CancelButton.onClick.RemoveListener(HideMenu);
             m_DeleteButton.onClick.RemoveListener(DeleteFocusedObject);
+            m_LockButton.onClick.RemoveListener(ToggleLockFocusedObject);
             m_PlaneManager.trackablesChanged.RemoveListener(OnPlaneChanged);
         }
 
@@ -292,10 +307,12 @@ namespace UnityEngine.XR.Templates.AR
                 if (m_ShowObjectMenu)
                 {
                     m_DeleteButton.gameObject.SetActive(false);
+                    m_LockButton.gameObject.SetActive(false);
                 }
                 else
                 {
                     m_DeleteButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
+                    m_LockButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
                 }
 
                 m_IsPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(-1);
@@ -305,6 +322,7 @@ namespace UnityEngine.XR.Templates.AR
                 m_IsPointerOverUI = false;
                 m_CreateButton.gameObject.SetActive(true);
                 m_DeleteButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
+                m_LockButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
             }
 
             if (!m_IsPointerOverUI && m_ShowOptionsModal)
@@ -458,6 +476,15 @@ namespace UnityEngine.XR.Templates.AR
             }
         }
 
+        void ToggleLockFocusedObject()
+        {
+            var currentFocusedObject = m_InteractionGroup.focusInteractable;
+            if (currentFocusedObject != null && currentFocusedObject.transform.gameObject.TryGetComponent<GameManager>(out var gameManager))
+            {
+                gameManager.ToggleGame();
+            }
+        }
+        
         void InitializeDebugMenuOffsets()
         {
             if (m_CreateButton.TryGetComponent<RectTransform>(out var buttonRect))

@@ -9,6 +9,8 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
     /// </summary>
     public class ObjectSpawner : MonoBehaviour
     {
+        public bool canSpawnObjects = true;
+        
         [SerializeField]
         [Tooltip("The camera that objects will face when spawned. If not set, defaults to the main camera.")]
         Camera m_CameraToFace;
@@ -151,6 +153,8 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         /// </summary>
         /// <seealso cref="TrySpawnObject"/>
         public event Action<GameObject> objectSpawned;
+        
+        public static ObjectSpawner Instance { get; private set; }
 
         /// <summary>
         /// See <see cref="MonoBehaviour"/>.
@@ -158,6 +162,15 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         void Awake()
         {
             EnsureFacingCamera();
+            
+            if (Instance != null && Instance != this) 
+            { 
+                Destroy(this); 
+            } 
+            else 
+            { 
+                Instance = this; 
+            } 
         }
 
         void EnsureFacingCamera()
@@ -264,7 +277,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         /// <seealso cref="objectSpawned"/>
         public void SpawnObject(Vector3 spawnPoint, Vector3 spawnNormal)
         {
-            if (!TrySpawnObject(spawnPoint, spawnNormal))
+            if (canSpawnObjects && !TrySpawnObject(spawnPoint, spawnNormal))
                 Debug.LogWarning("Could not spawn object.", this);
         }
     }
