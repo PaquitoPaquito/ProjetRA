@@ -42,7 +42,7 @@ namespace UnityEngine.XR.Templates.AR
         }
 
         [SerializeField]
-        [Tooltip("Button that deletes a selected object.")]
+        [Tooltip("Button that locks a selected object.")]
         Button m_LockButton;
 
         /// <summary>
@@ -52,6 +52,102 @@ namespace UnityEngine.XR.Templates.AR
         {
             get => m_LockButton;
             set => m_LockButton = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier1Button;
+        public Button grenier1Button
+        {
+            get => m_Grenier1Button;
+            set => m_Grenier1Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier2Button;
+        public Button grenier2Button
+        {
+            get => m_Grenier2Button;
+            set => m_Grenier2Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier3Button;
+        public Button grenier3Button
+        {
+            get => m_Grenier3Button;
+            set => m_Grenier3Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier4Button;
+        public Button grenier4Button
+        {
+            get => m_Grenier4Button;
+            set => m_Grenier4Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier5Button;
+        public Button grenier5Button
+        {
+            get => m_Grenier5Button;
+            set => m_Grenier5Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier6Button;
+        public Button grenier6Button
+        {
+            get => m_Grenier6Button;
+            set => m_Grenier6Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier7Button;
+        public Button grenier7Button
+        {
+            get => m_Grenier7Button;
+            set => m_Grenier7Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier8Button;
+        public Button grenier8Button
+        {
+            get => m_Grenier8Button;
+            set => m_Grenier8Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier9Button;
+        public Button grenier9Button
+        {
+            get => m_Grenier9Button;
+            set => m_Grenier9Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier10Button;
+        public Button grenier10Button
+        {
+            get => m_Grenier10Button;
+            set => m_Grenier10Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier11Button;
+        public Button grenier11Button
+        {
+            get => m_Grenier11Button;
+            set => m_Grenier11Button = value;
+        }
+
+        [SerializeField]
+        Button m_Grenier12Button;
+        public Button grenier12Button
+        {
+            get => m_Grenier12Button;
+            set => m_Grenier12Button = value;
         }
 
         [SerializeField]
@@ -245,6 +341,7 @@ namespace UnityEngine.XR.Templates.AR
             m_CancelButton.onClick.AddListener(HideMenu);
             m_DeleteButton.onClick.AddListener(DeleteFocusedObject);
             m_LockButton.onClick.AddListener(ToggleLockFocusedObject);
+            m_Grenier1Button.onClick.AddListener(ToggleLockFocusedObject);
             m_PlaneManager.trackablesChanged.AddListener(OnPlaneChanged);
         }
 
@@ -258,6 +355,7 @@ namespace UnityEngine.XR.Templates.AR
             m_CancelButton.onClick.RemoveListener(HideMenu);
             m_DeleteButton.onClick.RemoveListener(DeleteFocusedObject);
             m_LockButton.onClick.RemoveListener(ToggleLockFocusedObject);
+            m_Grenier1Button.onClick.RemoveListener(ToggleLockFocusedObject);
             m_PlaneManager.trackablesChanged.RemoveListener(OnPlaneChanged);
         }
 
@@ -308,11 +406,13 @@ namespace UnityEngine.XR.Templates.AR
                 {
                     m_DeleteButton.gameObject.SetActive(false);
                     m_LockButton.gameObject.SetActive(false);
+                    m_Grenier1Button.gameObject.SetActive(false);
                 }
                 else
                 {
                     m_DeleteButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
                     m_LockButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
+                    m_Grenier1Button.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
                 }
 
                 m_IsPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(-1);
@@ -323,6 +423,7 @@ namespace UnityEngine.XR.Templates.AR
                 m_CreateButton.gameObject.SetActive(true);
                 m_DeleteButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
                 m_LockButton.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
+                m_Grenier1Button.gameObject.SetActive(m_InteractionGroup?.focusInteractable != null);
             }
 
             if (!m_IsPointerOverUI && m_ShowOptionsModal)
@@ -482,6 +583,15 @@ namespace UnityEngine.XR.Templates.AR
             if (currentFocusedObject != null && currentFocusedObject.transform.gameObject.TryGetComponent<GameManager>(out var gameManager))
             {
                 gameManager.ToggleGame();
+            }
+        }
+
+        void ToggleLockFocusedObject(int i)
+        {
+            var currentFocusedObject = m_InteractionGroup.focusInteractable;
+            if (currentFocusedObject != null && currentFocusedObject.transform.gameObject.TryGetComponent<Board>(out var board))
+            {
+                board.Play(i);
             }
         }
         
